@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Truth Seekers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for clean, document-like feel */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9; /* Light background for the overall page */
+        }
+        .file-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .file-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            border-color: #3b82f6; /* Blue border on hover */
+        }
+        /* Custom Scrollbar for the main content area for a cleaner look */
+        .scroll-area::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scroll-area::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+        .scroll-area::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header / Navigation Bar -->
+    <header class="bg-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Icon: A simple magnifying glass for 'Seeking Truth' -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-blue-600">
+                    <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.644 4.644a.75.75 0 1 1-1.06 1.06l-4.644-4.644A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
+                </svg>
+                <h1 class="text-2xl font-bold text-gray-900">The Truth Seekers</h1>
+            </div>
+            <button onclick="alert('Search functionality goes here!')" class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <!-- Column 1: Document/File List (Main focus) -->
+        <section class="lg:col-span-3 bg-white p-6 rounded-xl shadow-md scroll-area h-full max-h-[calc(100vh-140px)] overflow-y-auto">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Artifacts & Research Documents</h2>
+
+            <!-- Search/Filter Bar (Simulated) -->
+            <div class="mb-6 flex space-x-2">
+                <input type="text" placeholder="Filter documents..." class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition duration-150">
+                    Sort
+                </button>
+            </div>
+
+            <!-- File Grid -->
+            <div id="file-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <!-- File Cards will be injected here by JS -->
+            </div>
+
+        </section>
+
+        <!-- Column 2: Treehouse Members (Sidebar) -->
+        <aside class="lg:col-span-1 bg-white p-6 rounded-xl shadow-md h-full lg:max-h-[calc(100vh-140px)] overflow-y-auto scroll-area">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Treehouse Members (5)</h2>
+            <div id="member-list" class="space-y-4">
+                <!-- Member Cards will be injected here by JS -->
+            </div>
+        </aside>
+
+    </main>
+
+    <script>
+        // Data for the website content
+        const files = [
+            {
+                title: "Protocol 01: Initial Contact Analysis",
+                type: "Document",
+                lastModified: "2 hours ago",
+                color: "bg-red-100 text-red-700",
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12.75 12.75a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1 0-1.5h4.5a.75.75 0 0 1 .75.75Z" /><path d="M7.5 16.5a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 0 1.5H7.5Z" /><path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-1.603-.835H4.5a2.25 2.25 0 0 0-2.25 2.25v10.5a2.25 2.25 0 0 0 2.25 2.25h14.25c.51 0 1.02-.113 1.48-.326a2.277 2.277 0 0 0 1.054-.925c.299-.446.477-.978.477-1.543V5.599c0-.672-.257-1.332-.736-1.835ZM18 5.599v.75a.75.75 0 0 0 1.5 0v-.75a.75.75 0 0 0-.75-.75h-.083a.75.75 0 0 0-.667.577L17.25 12h1.469a.75.75 0 0 1 .694.494l-.358 1.433a.75.75 0 0 1-.694.494H17.25a.75.75 0 0 0-.75.75v.75h-.083a.75.75 0 0 0-.667.577L14.25 19.5h-.75a.75.75 0 0 0 0 1.5h.75a2.25 2.25 0 0 0 2.25-2.25V5.599a.75.75 0 0 0-.75-.75h-.75v.083a.75.75 0 0 0-.577.667L15 9h-1.469a.75.75 0 0 1-.694-.494l.358-1.433a.75.75 0 0 1 .694-.494H15a.75.75 0 0 0 .75-.75v-.75Z" clip-rule="evenodd" /></svg>`
+            },
+            {
+                title: "Logbook: North Pole Expedition 2024",
+                type: "Spreadsheet",
+                lastModified: "1 day ago",
+                color: "bg-green-100 text-green-700",
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.037-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 18.375V5.625ZM16.5 6a1.5 1.5 0 0 0-1.5 1.5v3.75a1.5 1.5 0 0 0 1.5 1.5h1.5a1.5 1.5 0 0 0 1.5-1.5V7.5a1.5 1.5 0 0 0-1.5-1.5h-1.5Z" clip-rule="evenodd" /><path d="M1.5 9.75v-2.25c0-1.036.84-1.875 1.875-1.875h3.15A1.875 1.875 0 0 1 8.4 7.5v2.25H1.5Zm6.9 0v2.25c0 1.035-.84 1.875-1.875 1.875h-3.15V9.75H8.4Zm-5.024 4.875H6.525c.78 0 1.428.59 1.51 1.365a1.875 1.875 0 0 1-3.61.168.966.966 0 0 1 .135-.375h-.355V14.61ZM12 9.75v2.25h-2.25V9.75H12Zm-2.25 4.875H12V16.5h-2.25v-1.875Zm6.75-4.875H14.25V7.5h2.25v2.25ZM14.25 12h2.25v3.75h-2.25V12ZM21 9.75v-2.25c0-1.036-.84-1.875-1.875-1.875h-3.15A1.875 1.875 0 0 0 14.25 7.5v2.25H21Zm-1.875 4.875c.08.775.73 1.365 1.51 1.365H21v-1.875h-2.715Z" /></svg>`
+            },
+            {
+                title: "Image Archive: Crop Circle Site 17",
+                type: "Folder",
+                lastModified: "10 minutes ago",
+                color: "bg-yellow-100 text-yellow-700",
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M19.5 21a3 3 0 0 0 3-3V9a1.5 1.5 0 0 0-1.5-1.5H8.25m10.306 4.673l-2.5-2.5a1.5 1.5 0 0 0-2.122 0l-2.5 2.5a1.5 1.5 0 0 1-2.122 0l-.224-.224a1.5 1.5 0 0 0-2.122 0l-2.5 2.5m10.306 4.673H21a1.5 1.5 0 0 0 1.5-1.5V13.5m-19.5 3l-2.5-2.5a1.5 1.5 0 0 1-.224-.224m-.025-1.127l-2.5-2.5a1.5 1.5 0 0 1 0-2.122l2.5-2.5m10.306 4.673l2.5 2.5m-19.5-3V6a1.5 1.5 0 0 1 1.5-1.5h5.25A1.5 1.5 0 0 1 8.25 6v1.5M4.5 9h8.25" /></svg>`
+            },
+            {
+                title: "Draft Theory: The Third Variable",
+                type: "PDF",
+                lastModified: "3 days ago",
+                color: "bg-blue-100 text-blue-700",
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M3 3a1.5 1.5 0 0 0-1.5 1.5v13.5a1.5 1.5 0 0 0 1.5 1.5h18a1.5 1.5 0 0 0 1.5-1.5V4.5a1.5 1.5 0 0 0-1.5-1.5H3Zm6.75 3.75A.75.75 0 0 0 9 7.5v9h1.5a.75.75 0 0 0 .75-.75V8.25a.75.75 0 0 0-.75-.75H9ZM14.25 9a.75.75 0 0 0-.75.75v5.25a.75.75 0 0 0 .75.75h1.5a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-.75-.75h-1.5Z" clip-rule="evenodd" /></svg>`
+            },
+            {
+                title: "Meeting Notes: Feb 12th Teleconference",
+                type: "Document",
+                lastModified: "4 days ago",
+                color: "bg-red-100 text-red-700",
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M12.75 12.75a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1 0-1.5h4.5a.75.75 0 0 1 .75.75Z" /><path d="M7.5 16.5a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 0 1.5H7.5Z" /><path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-1.603-.835H4.5a2.25 2.25 0 0 0-2.25 2.25v10.5a2.25 2.25 0 0 0 2.25 2.25h14.25c.51 0 1.02-.113 1.48-.326a2.277 2.277 0 0 0 1.054-.925c.299-.446.477-.978.477-1.543V5.599c0-.672-.257-1.332-.736-1.835ZM18 5.599v.75a.75.75 0 0 0 1.5 0v-.75a.75.75 0 0 0-.75-.75h-.083a.75.75 0 0 0-.667.577L17.25 12h1.469a.75.75 0 0 1 .694.494l-.358 1.433a.75.75 0 0 1-.694.494H17.25a.75.75 0 0 0-.75.75v.75h-.083a.75.75 0 0 0-.667.577L14.25 19.5h-.75a.75.75 0 0 0 0 1.5h.75a2.25 2.25 0 0 0 2.25-2.25V5.599a.75.75 0 0 0-.75-.75h-.75v.083a.75.75 0 0 0-.577.667L15 9h-1.469a.75.75 0 0 1-.694-.494l.358-1.433a.75.75 0 0 1 .694-.494H15a.75.75 0 0 0 .75-.75v-.75Z" clip-rule="evenodd" /></svg>`
+            }
+        ];
+
+        const members = [
+            { name: "Agent Echo", role: "Lead Investigator", status: "Active", initials: "AE", color: "bg-blue-600" },
+            { name: "The Oracle", role: "Archivist/Data Analyst", status: "Away", initials: "TO", color: "bg-purple-600" },
+            { name: "Code Breaker", role: "Cryptographer", status: "Active", initials: "CB", color: "bg-green-600" },
+            { name: "Watcher 1", role: "Perimeter Intel", status: "Active", initials: "W1", color: "bg-yellow-600" },
+            { name: "The Professor", role: "Historical Consultant", status: "On Leave", initials: "TP", color: "bg-red-600" },
+        ];
+
+        /**
+         * Renders the File Cards into the file-list container.
+         */
+        function renderFiles() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = files.map(file => `
+                <div class="file-card bg-gray-50 border border-gray-200 p-4 rounded-xl cursor-pointer hover:border-blue-500 shadow-sm flex flex-col justify-between" onclick="alert('Opening: ${file.title}')">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 rounded-full ${file.color}">
+                                ${file.icon}
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 leading-snug">${file.title}</h3>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-700 transition duration-150 p-1 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path fill-rule="evenodd" d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM10.5 12a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM12 19.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between text-sm text-gray-500">
+                        <span>${file.type}</span>
+                        <span>Modified: ${file.lastModified}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * Renders the Treehouse Member List into the member-list container.
+         */
+        function renderMembers() {
+            const memberList = document.getElementById('member-list');
+            memberList.innerHTML = members.map(member => `
+                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-100 transition duration-150 cursor-pointer" onclick="alert('Viewing profile for ${member.name}')">
+                    <div class="relative">
+                        <!-- Avatar -->
+                        <div class="w-10 h-10 ${member.color} rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            ${member.initials}
+                        </div>
+                        <!-- Status Dot -->
+                        <span class="absolute right-0 bottom-0 block h-3 w-3 rounded-full ring-2 ring-white ${member.status === 'Active' ? 'bg-green-400' : (member.status === 'Away' ? 'bg-yellow-400' : 'bg-red-400')}"></span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800">${member.name}</p>
+                        <p class="text-xs text-gray-500">${member.role}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize on window load
+        window.onload = function() {
+            renderFiles();
+            renderMembers();
+        };
+    </script>
+</body>
+</html>
